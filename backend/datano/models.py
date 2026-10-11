@@ -16,8 +16,8 @@ class Instruction(models.Model) :
         
 
 
-        def _str_(self):
-                return self.istru 
+        def __str__(self):
+                return self.instru or f"Instruction #{self.id}" 
 
 
 

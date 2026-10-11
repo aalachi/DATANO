@@ -23,12 +23,19 @@ nav{
 }
 
 #central { 
-  position:relative;  
+  position: relative;  
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-
-#central canvas { position:absolute; top:0; left:0; background-size: 100% 100%; }
+#central canvas {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+}
 
 
 .close-button {
@@ -74,6 +81,42 @@ img[alt~="haha"] {
   color: #241C15;
   font-weight: 650;
 }
+
+#cropat {
+  max-height: calc(100vh - 340px);
+  min-height: 140px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+#cropat::-webkit-scrollbar {
+  width: 6px;
+}
+
+#cropat::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+#cropat::-webkit-scrollbar-thumb {
+  background: #a0aec0;
+  border-radius: 4px;
+}
+
+#cropat::-webkit-scrollbar-thumb:hover {
+  background: #718096;
+}
+
+.crop-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.crop-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
 #infoz {
   font-weight: 320;
 }

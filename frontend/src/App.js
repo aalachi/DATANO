@@ -1,134 +1,69 @@
-import React, { Component , useState, useEffect } from "react";
-import axios from "axios";
-import './components/Left.css'
-import Styles from './components/Styles'
-import './App.css'
-import { canvas } from "canvas";
-import Main from './components/Main'
-import { Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Nav from './components/Nav';
+import Main from './components/Main';
+import './components/Left.css';
+import './App.css';
 
+function App() {
+  const [collection, setCollection] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('home');
 
+  useEffect(() => {
+    fetchInstructions();
+  }, []);
 
-
-
-
-
-class App extends Component{
-
-	allData = []
-
-	firstCollecArray = [] 
-	restCollec = [] 
-	viewCollec = [] 
-	currentInstru = []
-
-	canvaCordX = ''
-	canvaCordY = ''
-	isCrop = 0
-	theCropsCord = []
-	tkhrbiqa = 0
-	mainImage  = ''
-	nbCrop = 1
-	widthCrop = 0
-	heightCrop = 0
-
-    constructor(props){
-      super(props);
-      this.state = {
-        collection: [],
-        view: '',
-        instru:'',
-        qanva:[]
-      }
-
-   
-	  
+  const fetchInstructions = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get('/api/Instructions/');
+      setCollection(res.data || []);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to fetch instructions:', err);
+      setError('Could not connect to DATANO API. Please ensure the Django backend is running on port 8000.');
+    } finally {
+      setLoading(false);
     }
+  };
 
-    componentDidMount() {
-		this.getData();
-    }
-
-    getData = () => {
-      axios
-        .get("/api/Instructions/")
-        .then((res) => {this.setState({ collection: res.data } ) })
-        .catch((err) => console.log(err));
-    };
-
-
-
-	NavBar() {
-		return(
-				// <nav className="navbar navbar-inverse navbar-fixed-top" >
-			    //     <div className="container-fluid">
-			    //       <div className="navbar-header">
-			    //         <a  href="brrr" className="navbar-brand" >DATANO API - Image Annotation</a>
-			    //       </div>
-			    //     </div>
-		        // </nav>
-				<nav class="navbar">
-
-
-					<div class="logo">DATANO</div>
-
-
-					<ul class="nav-links">
-
-
-					<div class="menu">
-
-					<li><a id="hom" >Home</a></li>
-
-					<li><a id='abt'>About</a></li>
-
-					</div>
-
-					</ul>
-
-					</nav>
-		)
-	}
-	
-	
-
-
-    render(){
-
-      return(
-		<>{this.NavBar()}
-
-        <main className="container-fluid">
-
-          
-
-          
-          <div className="row" >
-				<Main data={this.state.collection} ></Main>
+  return (
+    <>
+      <Nav activeTab={activeTab} onTabChange={setActiveTab} />
+      
+      <main className="container-fluid px-3">
+        {loading && (
+          <div className="text-center py-5">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p className="mt-2 text-muted">Loading DATANO dataset...</p>
           </div>
+        )}
 
-          
+        {error && (
+          <div className="alert alert-warning text-center mx-auto my-4" style={{ maxWidth: '700px' }}>
+            <h5 className="alert-heading">Connection Notice</h5>
+            <p className="mb-2">{error}</p>
+            <button 
+              className="btn btn-outline-dark btn-sm" 
+              onClick={fetchInstructions}
+            >
+              Retry Connection
+            </button>
+          </div>
+        )}
 
-        </main>
-		</>
-
-    )
-  }
-
+        {!loading && (
+          <div className="row">
+            <Main data={collection} />
+          </div>
+        )}
+      </main>
+    </>
+  );
 }
 
-
-
-
-export default App ;
-
-
-
-
-
-
-// INSERT INTO auth_user (username, password, is_superuser, is_staff, first_name, last_name, email,is_active , date_joined)
-// VALUES ('cosmic', 'pass', 1, 1, 'farawa', 'molchi', 'molchi@mol.io',1,  1);
-
-
-// PRAGMA table_info(auth_user);
+export default App;

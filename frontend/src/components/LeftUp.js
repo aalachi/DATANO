@@ -1,37 +1,43 @@
-import React, { Component } from "react";
+import React from 'react';
 
+function LeftUp({ firstRow, restCollec = [], selectedCollection, onSelectCollection }) {
+  const allCollections = [firstRow, ...restCollec].filter(Boolean);
 
+  return (
+    <div id="objectz" className="col">
+      <div id="objectzName" className="row">
+        Objects :
+      </div>
 
-class LeftUp extends Component {
-
-    render() {
-
-        var firstRow = this.props.firstRow
-        var restCollec = this.props.restCollec
-
-        return(
-            <div>
- 				<div id="objectz" className="col">
-    			<div id='objectzName'className="row">
- 					Objects :
-                
-				</div>
-
-				<div id='objectzList' className="row" >
- 					<div className="col" >
- 						<div className="row" key={firstRow.toString()}><input type="checkbox" name="myCheckbox" id={firstRow.toString()} onClick={this.props.handler} />{firstRow.toString()}</div>
-						{ restCollec.map((item,index) => { return <div className="row"  key={item.toString()}><input type="checkbox" name="myCheckbox" id={item.toString()} onClick={this.props.handler}  />{item.toString()}</div>; }) }
- 					</div>
-				</div>
-				</div>
-			</div>
-        )
-
-	}
+      <div id="objectzList" className="row">
+        <div className="col">
+          {allCollections.map((item) => {
+            const isChecked = selectedCollection === item;
+            return (
+              <div 
+                className="row py-1 align-items-center" 
+                key={item}
+                style={{ cursor: 'pointer' }}
+                onClick={() => onSelectCollection(item)}
+              >
+                <label className="d-flex align-items-center mb-0" style={{ cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    name="myCheckbox"
+                    id={item}
+                    checked={isChecked}
+                    onChange={() => onSelectCollection(item)}
+                    style={{ marginRight: '8px' }}
+                  />
+                  <span>{item}</span>
+                </label>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-
-
-
-export default LeftUp ;
-
+export default LeftUp;

@@ -1,146 +1,125 @@
-import React, { Component } from "react";
-import LeftUp from './LeftUp'
-import LeftDown from './LeftDown'
-import Center from './Center'
-import Right from './Right'
+import React, { useState, useMemo, useEffect } from 'react';
+import LeftUp from './LeftUp';
+import LeftDown from './LeftDown';
+import Center from './Center';
+import Right from './Right';
 
-import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+function Main({ data = [] }) {
+  const [currCollectionName, setCurrCollectionName] = useState('');
+  const [currInstruId, setCurrInstruId] = useState('');
+  // Store annotations keyed by taskId: { [taskId]: [crop1, crop2, ...] }
+  const [taskAnnotations, setTaskAnnotations] = useState({});
 
-
-
-class Main extends Component {
-
-
-    constructor(props){
-        super(props)
-        this.state = {
-            currCollectionName:"",
-            currInstruId : "",
-            isCcollectionSelected : false
-        }
-
-
-        this.selectCollection = this.selectCollection.bind(this)
-        this.selectInstruction = this.selectInstruction.bind(this)
-
+  // Extract unique collection names
+  const { firstRow, restCollec } = useMemo(() => {
+    if (!data || data.length === 0) {
+      return { firstRow: null, restCollec: [] };
     }
 
+    const uniqueCollections = Array.from(new Set(data.map((item) => item.collection).filter(Boolean)));
+    const first = uniqueCollections[0] || null;
+    const rest = uniqueCollections.slice(1);
 
+    return { firstRow: first, restCollec: rest };
+  }, [data]);
 
-
-
-    // HANDLERZZ changent states,,, render() kitssna/kikhdm b new state 
-    selectCollection(event){
-        var myCheckbox = document.getElementsByName("myCheckbox");
-        Array.prototype.forEach.call(myCheckbox,function(el){
-          el.checked = false;  
-        });
-        event.target.checked = true;
-
-        // event.target.id  coresponds to NAME
-        this.setState({ isCcollectionSelected: true , currCollectionName: event.target.id   })
+  // Set default collection once data arrives
+  useEffect(() => {
+    if (firstRow && !currCollectionName) {
+      setCurrCollectionName(firstRow);
     }
+  }, [firstRow, currCollectionName]);
 
-    selectInstruction(event){
-	    this.setState({currInstruId : event.target.id})      
-    }    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Filter tasks belonging to active collection
+  const viewCollec = useMemo(() => {
+    if (!data || !currCollectionName) return [];
+    return data.filter((item) => item.collection === currCollectionName);
+  }, [data, currCollectionName]);
 
-
-
-
-
-    getCollectionNames(data) {
-        if(data && data[0]){
-            const firstRow = data[0];
-            const restCollec = [];
-
-            for (let i = 1; i < data.length; i++) {
-                if (!restCollec.includes(data[i].collection) && data[i].collection !== firstRow.collection) {
-                    restCollec.push(data[i].collection);
-                } 
-            }
-            return [ firstRow.collection , restCollec ]
-        }
-        else {
-            return [null, null]
-        }
+  // Set default instruction when collection changes
+  useEffect(() => {
+    if (viewCollec.length > 0) {
+      // If current instruction is not in viewCollec, select the first one
+      const existsInCurrentView = viewCollec.some((item) => String(item.id) === String(currInstruId));
+      if (!existsInCurrentView) {
+        setCurrInstruId(String(viewCollec[0].id));
+      }
     }
+  }, [viewCollec, currInstruId]);
 
-    getViewCollection(data){
-        if(data) {
-            const viewCollec = [];
-            for (let i = 0; i < data.length; i++) {
-                if (data[i].collection === this.state.currCollectionName) {
-                    viewCollec.push(data[i]);
-                }
-            }
-            return viewCollec
-        }
-        else { return null }
-    }
+  // Get current active instruction object
+  const currInstru = useMemo(() => {
+    if (!data || !currInstruId) return null;
+    return data.find((item) => String(item.id) === String(currInstruId)) || null;
+  }, [data, currInstruId]);
 
-    getInstruction(data){
-        if(data){
-            let currentInstru = [];
-            for (let i = 0; i < data.length; i++) {
-                if (data[i].id == Number(this.state.currInstruId)) {
-                    currentInstru = data[i];
-                }
-            }
-            // debugger;
-            return currentInstru
-        }
-        else { return null}
-    }
+  // Current active taskId
+  const activeTaskId = currInstru?.taskId || 'default';
+  const currentTaskCrops = taskAnnotations[activeTaskId] || [];
 
+  // Annotation handlers
+  const handleAddCrop = (newCrop) => {
+    setTaskAnnotations((prev) => ({
+      ...prev,
+      [activeTaskId]: [...(prev[activeTaskId] || []), newCrop]
+    }));
+  };
 
+  const handleDeleteCrop = (cropId) => {
+    setTaskAnnotations((prev) => ({
+      ...prev,
+      [activeTaskId]: (prev[activeTaskId] || []).filter((crop) => crop.id !== cropId)
+    }));
+  };
 
+  const handleClearAllCrops = () => {
+    setTaskAnnotations((prev) => ({
+      ...prev,
+      [activeTaskId]: []
+    }));
+  };
 
+  if (!firstRow) {
+    return (
+      <div className="col-12 text-center py-5">
+        <p className="text-muted">No collections found in dataset.</p>
+      </div>
+    );
+  }
 
+  return (
+    <>
+      <div className="col-lg-2">
+        <LeftUp
+          firstRow={firstRow}
+          restCollec={restCollec}
+          selectedCollection={currCollectionName}
+          onSelectCollection={(name) => setCurrCollectionName(name)}
+        />
 
-    render(){
+        <div className="my-3" />
 
-        var [ firstRow, restCollec ] = this.getCollectionNames(this.props.data)
-        var viewCollec = this.getViewCollection(this.props.data)
-        var currInstru = this.getInstruction(this.props.data)
+        <LeftDown
+          viewCollec={viewCollec}
+          currInstruId={currInstruId}
+          onSelectInstruction={(id) => setCurrInstruId(String(id))}
+        />
+      </div>
 
+      <Center
+        currInstru={currInstru}
+        onAddCrop={handleAddCrop}
+        existingCrops={currentTaskCrops}
+      />
 
-        if (firstRow && restCollec ) {
-            return (
-                <>
-                    <div className="col-lg-2">
-                        <LeftUp restCollec={restCollec} firstRow={firstRow} handler={this.selectCollection}/>
-                        
-                        <div className="col" style={{height : '20px'}}></div>
-                        
-
-                        <LeftDown viewCollec={viewCollec} handler={this.selectInstruction} />
-
-                        {/* {viewCollec[0] ? <LeftDown         /> : nulll }                    where to handle business lgic ?                                            */} 
-                    
-                    </div> 
-
-                    <Center currInstru={currInstru} />
-
-                    <Right currInstru={currInstru} />
-                </>
-            ) 
-        }
-        else {return (null)}
-	}
-
-
+      <Right
+        currInstru={currInstru}
+        crops={currentTaskCrops}
+        onDeleteCrop={handleDeleteCrop}
+        onClearAll={handleClearAllCrops}
+      />
+    </>
+  );
 }
 
-
-
-export default Main ;
-
-
-
-
-
-
-
+export default Main;
