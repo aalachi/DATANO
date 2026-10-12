@@ -1,0 +1,60 @@
+[     653ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/static/js/bundle.js:25394
+[     724ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[     761ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[     763ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[     831ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/logo192.png:0
+[     832ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[     832ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[     833ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:3000/logo192.png (Download error or resource isn't a valid image) @ http://localhost:3000/:0
+[    5992ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[    8037ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   12106ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   20168ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   36257ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   59768ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/static/js/bundle.js:25394
+[   59844ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   59863ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[   59863ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[   59866ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/logo192.png:0
+[   59876ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:3000/logo192.png (Download error or resource isn't a valid image) @ http://localhost:3000/:0
+[   59928ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[   59929ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[   60952ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   61041ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/static/js/bundle.js:25394
+[   61087ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   61101ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[   61102ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[   61104ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/logo192.png:0
+[   61105ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:3000/logo192.png (Download error or resource isn't a valid image) @ http://localhost:3000/:0
+[   61127ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[   61128ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[   61987ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/static/js/bundle.js:25394
+[   62028ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   62034ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[   62035ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[   62038ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/logo192.png:0
+[   62039ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:3000/logo192.png (Download error or resource isn't a valid image) @ http://localhost:3000/:0
+[   62045ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[   62046ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[   62895ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/static/js/bundle.js:25394
+[   62948ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   62956ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[   62957ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[   62967ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/logo192.png:0
+[   62967ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:3000/logo192.png (Download error or resource isn't a valid image) @ http://localhost:3000/:0
+[   62987ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[   62987ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[   63970ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/static/js/bundle.js:25394
+[   64026ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[   64026ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[   64029ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/logo192.png:0
+[   64029ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:3000/logo192.png (Download error or resource isn't a valid image) @ http://localhost:3000/:0
+[   64042ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/Instructions/:0
+[   64043ms] [ERROR] Failed to fetch instructions: AxiosError @ http://localhost:3000/static/js/bundle.js:51
+[   64146ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   65292ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   68408ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   73915ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[   86835ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[  107469ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826
+[  139477ms] [ERROR] WebSocket connection to 'ws://localhost:443/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:27826

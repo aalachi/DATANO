@@ -79,23 +79,22 @@ function ImageCrop() {
   };
 
   return (
-    <div className="card p-3 my-3">
-      <h5 className="card-title">Standalone Image Cropper (Utility)</h5>
+    <div className="datano-card" style={{ margin: '20px 0' }}>
+      <h5 className="datano-card-header">Standalone Image Cropper (Utility)</h5>
       <input 
         type="file" 
         accept="image/*" 
-        className="form-control mb-3" 
+        style={{ display: 'block', marginBottom: '16px', padding: '8px', border: '1px solid var(--color-border)', borderRadius: '4px' }} 
         onChange={handleFileChange} 
       />
 
       {image && (
-        <div className="position-relative d-inline-block">
+        <div style={{ position: 'relative', display: 'inline-block' }}>
           <canvas
             ref={canvasRef}
             width={canvasDimensions.width}
             height={canvasDimensions.height}
-            className="border rounded"
-            style={{ maxWidth: '100%', height: 'auto', cursor: 'crosshair' }}
+            style={{ maxWidth: '100%', height: 'auto', cursor: 'crosshair', border: '1px solid var(--color-border)', borderRadius: '4px' }}
             onMouseDown={handleCanvasMouseDown}
             onMouseMove={handleCanvasMouseMove}
             onMouseUp={handleCanvasMouseUp}
@@ -118,9 +117,13 @@ function ImageCrop() {
       )}
 
       {croppedImage && (
-        <div className="mt-3">
-          <h6>Cropped Result:</h6>
-          <img src={croppedImage} alt="Cropped Preview" className="border rounded shadow-sm" style={{ maxHeight: '200px' }} />
+        <div style={{ marginTop: '16px' }}>
+          <h6 style={{ fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>Cropped Result:</h6>
+          <img 
+            src={croppedImage} 
+            alt="Cropped Preview" 
+            style={{ maxHeight: '200px', border: '1px solid var(--color-border)', borderRadius: '4px', boxShadow: 'var(--shadow-sm)' }} 
+          />
         </div>
       )}
     </div>

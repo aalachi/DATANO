@@ -211,30 +211,29 @@ function Center({ currInstru, onAddCrop, existingCrops = [] }) {
 
   if (!currInstru || !currInstru.instru) {
     return (
-      <div id="santr" className="col-lg-7 d-flex align-items-center justify-content-center" style={{ minHeight: '400px' }}>
-        <p className="text-muted">Select a collection and an image from the left panel to begin annotating.</p>
-      </div>
+      <main id="santr" className="datano-workspace" style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ color: 'var(--color-text-muted)' }}>Select a collection and an image from the left panel to begin annotating.</p>
+      </main>
     );
   }
 
   return (
-    <div id="santr" className="col-lg-7">
+    <main id="santr" className="datano-workspace">
       {/* Instruction & Controls Header */}
-      <div id="foqcentral" className="d-flex justify-content-between align-items-center mb-2 px-3 py-2">
-        <div className="d-flex align-items-center gap-2">
-          <span id="instdir" className="fw-bold">Instruction:</span>
-          <span className="text-primary fw-semibold">{currInstru.instru}</span>
+      <div id="foqcentral" className="datano-header-bar">
+        <div className="datano-instruction-group">
+          <span id="instdir" className="datano-instruction-title">Instruction:</span>
+          <span className="datano-instruction-text">{currInstru.instru}</span>
         </div>
         
         {imageLoaded && (
-          <div className="d-flex align-items-center gap-2">
-            <span className="badge bg-secondary" style={{ fontSize: '11px' }}>
+          <div className="datano-controls-group">
+            <span className="datano-badge datano-badge-secondary">
               {imageDimensions.width} &times; {imageDimensions.height} px
             </span>
             <button
               type="button"
-              className={`btn btn-sm ${viewMode === 'fit' ? 'btn-primary' : 'btn-outline-primary'}`}
-              style={{ fontSize: '11px', padding: '2px 8px' }}
+              className={`datano-btn ${viewMode === 'fit' ? 'datano-btn-primary' : 'datano-btn-outline-primary'}`}
               onClick={() => setViewMode(viewMode === 'fit' ? 'full' : 'fit')}
               title={viewMode === 'fit' ? 'Switch to Full Width' : 'Fit Entire Image on Screen'}
             >
@@ -244,30 +243,15 @@ function Center({ currInstru, onAddCrop, existingCrops = [] }) {
         )}
       </div>
 
-      {/* Main Canvas Viewport Container: No fixed height, shows the ENTIRE image */}
-      <div 
-        id="central" 
-        className="d-flex justify-content-center align-items-center position-relative w-100 p-2 mb-3"
-        style={{
-          background: '#0e141b',
-          borderRadius: '8px',
-          minHeight: '260px',
-          boxShadow: 'rgba(0, 0, 0, 0.25) 0px 4px 14px'
-        }}
-      >
+      {/* Main Canvas Viewport Container */}
+      <div id="central" className="datano-viewport">
         <canvas
           id="imgCanva"
           ref={canvasRef}
+          className="datano-canvas"
           style={{
-            maxWidth: '100%',
             maxHeight: viewMode === 'fit' ? '72vh' : 'none',
-            width: 'auto',
-            height: 'auto',
-            display: imageLoaded ? 'block' : 'none',
-            cursor: 'crosshair',
-            userSelect: 'none',
-            borderRadius: '4px',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.4)'
+            display: imageLoaded ? 'block' : 'none'
           }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -275,27 +259,25 @@ function Center({ currInstru, onAddCrop, existingCrops = [] }) {
         />
 
         {!imageLoaded && (
-          <div className="text-light text-center py-5">
-            <div className="spinner-border spinner-border-sm me-2 text-primary" role="status" />
+          <div style={{ textAlign: 'center', color: '#ffffff', padding: '60px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="datano-spinner datano-spinner-sm" />
             <span>Loading image asset...</span>
           </div>
         )}
       </div>
 
       {/* Reviewer Notes & Comments */}
-      <div className="row mb-3">
-        <div id="msgsection" className="col-12">
-          <textarea
-            id="brr"
-            className="form-control"
-            placeholder="Add reviewer notes or annotation comments for this task..."
-            rows={3}
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
-        </div>
+      <div id="msgsection" className="datano-notes-section">
+        <textarea
+          id="brr"
+          className="datano-notes-input"
+          placeholder="Add reviewer notes or annotation comments for this task..."
+          rows={3}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
       </div>
-    </div>
+    </main>
   );
 }
 

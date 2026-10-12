@@ -1,0 +1,13 @@
+- generic [ref=f10e3]:
+  - navigation [ref=f10e4]:
+    - generic [ref=f10e5]: DATANO
+    - list [ref=f10e6]:
+      - generic [ref=f10e7]:
+        - listitem [ref=f10e8]:
+          - link "Home" [ref=f10e9] [cursor=pointer]:
+            - /url: "#home"
+        - listitem [ref=f10e10]:
+          - link "About" [ref=f10e11] [cursor=pointer]:
+            - /url: "#about"
+  - main [ref=f10e12]:
+    - paragraph [ref=f10e15]: Loading DATANO dataset...

@@ -4,37 +4,34 @@ function LeftUp({ firstRow, restCollec = [], selectedCollection, onSelectCollect
   const allCollections = [firstRow, ...restCollec].filter(Boolean);
 
   return (
-    <div id="objectz" className="col">
-      <div id="objectzName" className="row">
+    <div id="objectz" className="datano-card">
+      <div id="objectzName" className="datano-card-header">
         Objects :
       </div>
 
-      <div id="objectzList" className="row">
-        <div className="col">
-          {allCollections.map((item) => {
-            const isChecked = selectedCollection === item;
-            return (
-              <div 
-                className="row py-1 align-items-center" 
-                key={item}
-                style={{ cursor: 'pointer' }}
-                onClick={() => onSelectCollection(item)}
-              >
-                <label className="d-flex align-items-center mb-0" style={{ cursor: 'pointer' }}>
-                  <input
-                    type="checkbox"
-                    name="myCheckbox"
-                    id={item}
-                    checked={isChecked}
-                    onChange={() => onSelectCollection(item)}
-                    style={{ marginRight: '8px' }}
-                  />
-                  <span>{item}</span>
-                </label>
-              </div>
-            );
-          })}
-        </div>
+      <div id="objectzList" className="datano-objects-list">
+        {allCollections.map((item) => {
+          const isChecked = selectedCollection === item;
+          return (
+            <label 
+              key={item} 
+              className="datano-checkbox-item"
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelectCollection(item);
+              }}
+            >
+              <input
+                type="checkbox"
+                name="collectionSelect"
+                id={item}
+                checked={isChecked}
+                onChange={() => onSelectCollection(item)}
+              />
+              <span>{item}</span>
+            </label>
+          );
+        })}
       </div>
     </div>
   );

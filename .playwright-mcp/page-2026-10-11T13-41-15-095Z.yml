@@ -1,0 +1,17 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]: DATANO
+    - list [ref=e5]:
+      - generic [ref=e6]:
+        - listitem [ref=e7]:
+          - link "Home" [ref=e8] [cursor=pointer]:
+            - /url: "#home"
+        - listitem [ref=e9]:
+          - link "About" [ref=e10] [cursor=pointer]:
+            - /url: "#about"
+  - main [ref=e11]:
+    - generic [ref=e12]:
+      - heading "Connection Notice" [level=5] [ref=e13]
+      - paragraph [ref=e14]: Could not connect to DATANO API. Please ensure the Django backend is running on port 8000.
+      - button "Retry Connection" [ref=e15] [cursor=pointer]
+    - paragraph [ref=e18]: No collections found in dataset.

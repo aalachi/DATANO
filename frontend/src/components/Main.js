@@ -53,43 +53,43 @@ function Main({ data = [] }) {
     return data.find((item) => String(item.id) === String(currInstruId)) || null;
   }, [data, currInstruId]);
 
-  // Current active taskId
-  const activeTaskId = currInstru?.taskId || 'default';
-  const currentTaskCrops = taskAnnotations[activeTaskId] || [];
+  // Current active unique task key (using database id to avoid collision between collections sharing taskId)
+  const activeTaskKey = currInstru ? String(currInstru.id) : 'default';
+  const currentTaskCrops = taskAnnotations[activeTaskKey] || [];
 
   // Annotation handlers
   const handleAddCrop = (newCrop) => {
     setTaskAnnotations((prev) => ({
       ...prev,
-      [activeTaskId]: [...(prev[activeTaskId] || []), newCrop]
+      [activeTaskKey]: [...(prev[activeTaskKey] || []), newCrop]
     }));
   };
 
   const handleDeleteCrop = (cropId) => {
     setTaskAnnotations((prev) => ({
       ...prev,
-      [activeTaskId]: (prev[activeTaskId] || []).filter((crop) => crop.id !== cropId)
+      [activeTaskKey]: (prev[activeTaskKey] || []).filter((crop) => crop.id !== cropId)
     }));
   };
 
   const handleClearAllCrops = () => {
     setTaskAnnotations((prev) => ({
       ...prev,
-      [activeTaskId]: []
+      [activeTaskKey]: []
     }));
   };
 
   if (!firstRow) {
     return (
-      <div className="col-12 text-center py-5">
-        <p className="text-muted">No collections found in dataset.</p>
+      <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--color-text-muted)' }}>
+        <p>No collections found in dataset.</p>
       </div>
     );
   }
 
   return (
-    <>
-      <div className="col-lg-2">
+    <div className="datano-layout">
+      <aside className="datano-sidebar">
         <LeftUp
           firstRow={firstRow}
           restCollec={restCollec}
@@ -97,14 +97,12 @@ function Main({ data = [] }) {
           onSelectCollection={(name) => setCurrCollectionName(name)}
         />
 
-        <div className="my-3" />
-
         <LeftDown
           viewCollec={viewCollec}
           currInstruId={currInstruId}
           onSelectInstruction={(id) => setCurrInstruId(String(id))}
         />
-      </div>
+      </aside>
 
       <Center
         currInstru={currInstru}
@@ -118,7 +116,7 @@ function Main({ data = [] }) {
         onDeleteCrop={handleDeleteCrop}
         onClearAll={handleClearAllCrops}
       />
-    </>
+    </div>
   );
 }
 

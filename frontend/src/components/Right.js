@@ -15,54 +15,54 @@ function Right({ currInstru, crops = [], onDeleteCrop, onClearAll }) {
   };
 
   return (
-    <div className="col-lg-3" style={{ position: 'sticky', top: '15px', alignSelf: 'flex-start' }}>
+    <aside className="datano-inspector">
       {/* Task Metadata Card */}
-      <div id="infoz" className="col p-3 mb-3 shadow-sm" style={{ borderRadius: '10px' }}>
-        <h6 className="fw-bold mb-3 border-bottom pb-2 text-dark">Task Details</h6>
-        <div className="row mb-1">
-          <div className="col-5 text-muted" style={{ fontSize: '13px' }}>Task ID:</div>
-          <div className="col-7 fw-semibold text-truncate" style={{ fontSize: '13px' }}>{currInstru.taskId || 'N/A'}</div>
+      <div id="infoz" className="datano-card">
+        <div className="datano-card-header">
+          Task Details
         </div>
-        <div className="row mb-1">
-          <div className="col-5 text-muted" style={{ fontSize: '13px' }}>Collection:</div>
-          <div className="col-7" style={{ fontSize: '13px' }}>{currInstru.collection || 'Default'}</div>
-        </div>
-        <div className="row mb-1">
-          <div className="col-5 text-muted" style={{ fontSize: '13px' }}>Created At:</div>
-          <div className="col-7 text-truncate" style={{ fontSize: '13px' }}>{currInstru.createdAt || 'N/A'}</div>
-        </div>
-        <div className="row mb-1">
-          <div className="col-5 text-muted" style={{ fontSize: '13px' }}>Urgency:</div>
-          <div className="col-7">
-            <span className={`badge ${currInstru.urgency === 'High' ? 'bg-danger' : 'bg-primary'}`} style={{ fontSize: '11px' }}>
-              {currInstru.urgency || 'Normal'}
-            </span>
+        <div className="datano-detail-list">
+          <div className="datano-detail-row">
+            <span className="datano-detail-label">Task ID:</span>
+            <span className="datano-detail-value">{currInstru.taskId || 'N/A'}</span>
           </div>
-        </div>
-        <div className="row mb-1">
-          <div className="col-5 text-muted" style={{ fontSize: '13px' }}>Asset:</div>
-          <div className="col-7 text-truncate" style={{ fontSize: '12px' }} title={currInstru.src}>
-            {currInstru.src ? currInstru.src.split('/').pop() : 'N/A'}
+          <div className="datano-detail-row">
+            <span className="datano-detail-label">Collection:</span>
+            <span className="datano-detail-value">{currInstru.collection || 'Default'}</span>
+          </div>
+          <div className="datano-detail-row">
+            <span className="datano-detail-label">Created At:</span>
+            <span className="datano-detail-value">{currInstru.createdAt || 'N/A'}</span>
+          </div>
+          <div className="datano-detail-row">
+            <span className="datano-detail-label">Urgency:</span>
+            <div>
+              <span className={`datano-badge ${currInstru.urgency === 'High' ? 'datano-badge-danger' : 'datano-badge-primary'}`}>
+                {currInstru.urgency || 'Normal'}
+              </span>
+            </div>
+          </div>
+          <div className="datano-detail-row">
+            <span className="datano-detail-label">Asset:</span>
+            <span className="datano-detail-value" title={currInstru.src}>
+              {currInstru.src ? currInstru.src.split('/').pop() : 'N/A'}
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Annotations & Crops Gallery: Scrollable & Non-Stacking */}
-      <div id="zcrops" className="col p-3 shadow-sm" style={{ borderRadius: '10px' }}>
-        <div className="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-          <div id="ntatio" className="fw-bold mb-0">
-            Annotations ({crops.length})
-          </div>
+      {/* Annotations & Crops Gallery */}
+      <div id="zcrops" className="datano-card">
+        <div id="ntatio" className="datano-card-header">
+          <span>Annotations ({crops.length})</span>
           {crops.length > 0 && (
-            <div className="d-flex align-items-center gap-2">
-              <span className="badge bg-success" style={{ fontSize: '11px' }}>
-                Active
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className="datano-badge datano-badge-success">Active</span>
               {onClearAll && (
                 <button
                   type="button"
-                  className="btn btn-outline-danger btn-sm py-0 px-2"
-                  style={{ fontSize: '11px' }}
+                  className="datano-btn datano-btn-outline-danger"
+                  style={{ padding: '2px 8px', fontSize: '11px' }}
                   onClick={onClearAll}
                   title="Clear all annotations on this task"
                 >
@@ -74,50 +74,29 @@ function Right({ currInstru, crops = [], onDeleteCrop, onClearAll }) {
         </div>
 
         {/* Scrollable container with fixed maximum height */}
-        <div
-          id="cropat"
-          style={{
-            maxHeight: 'calc(100vh - 360px)',
-            minHeight: '160px',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px',
-            paddingRight: '4px'
-          }}
-        >
+        <div id="cropat" className="datano-crops-container">
           {crops.length === 0 ? (
-            <div className="text-center py-4 text-muted" style={{ fontSize: '13px' }}>
-              <p className="mb-1">No annotations yet.</p>
+            <div className="datano-empty-state">
+              <p style={{ marginBottom: '4px' }}>No annotations yet.</p>
               <small>Click and drag on the image to crop bounding boxes.</small>
             </div>
           ) : (
             crops.map((crop, index) => (
-              <div
-                key={crop.id}
-                className="crop-card card shadow-sm border-0 position-relative"
-                style={{
-                  backgroundColor: '#ffffff',
-                  borderRadius: '8px',
-                  overflow: 'hidden'
-                }}
-              >
+              <div key={crop.id} className="datano-crop-card">
                 {/* Header row: badge, real dimensions, download, delete */}
-                <div className="d-flex justify-content-between align-items-center px-3 py-1 bg-light border-bottom">
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="badge bg-success" style={{ fontSize: '11px' }}>
+                <div className="datano-crop-header">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span className="datano-badge datano-badge-success">
                       #{index + 1}
                     </span>
-                    <span className="text-secondary fw-semibold" style={{ fontSize: '11px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-muted)' }}>
                       {crop.width} &times; {crop.height} px
                     </span>
                   </div>
-                  <div className="d-flex align-items-center gap-2">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <button
                       type="button"
-                      className="btn btn-sm btn-link text-muted p-0 text-decoration-none"
-                      style={{ fontSize: '12px' }}
+                      className="datano-btn-icon"
                       title="Download crop PNG"
                       onClick={() => handleDownloadCrop(crop, index)}
                     >
@@ -128,41 +107,26 @@ function Right({ currInstru, crops = [], onDeleteCrop, onClearAll }) {
                     </button>
                     <button
                       type="button"
-                      className="btn-close"
-                      style={{ fontSize: '9px', padding: '4px' }}
+                      className="datano-btn-close"
                       aria-label="Delete crop"
                       title="Delete annotation"
                       onClick={() => onDeleteCrop && onDeleteCrop(crop.id)}
-                    />
+                    >
+                      &times;
+                    </button>
                   </div>
                 </div>
 
-                {/* Image container: Keeps the real dimensions and natural aspect ratio of the crop! */}
-                <div
-                  className="p-2 d-flex justify-content-center align-items-center"
-                  style={{
-                    backgroundColor: '#f8f9fa',
-                    minHeight: '70px'
-                  }}
-                >
+                {/* Image container */}
+                <div className="datano-crop-body">
                   <img
                     src={crop.dataUrl}
                     alt={`Crop ${index + 1}`}
-                    style={{
-                      maxWidth: '100%',
-                      maxHeight: '160px',
-                      width: 'auto',
-                      height: 'auto',
-                      display: 'block',
-                      borderRadius: '4px',
-                      boxShadow: '0 1px 4px rgba(0, 0, 0, 0.15)',
-                      objectFit: 'contain'
-                    }}
                   />
                 </div>
 
                 {/* Footer row: coordinates */}
-                <div className="px-3 py-1 bg-white border-top d-flex justify-content-between text-muted" style={{ fontSize: '11px' }}>
+                <div className="datano-crop-footer">
                   <span>X: {crop.x}, Y: {crop.y}</span>
                   <span>{crop.createdAt || ''}</span>
                 </div>
@@ -171,7 +135,7 @@ function Right({ currInstru, crops = [], onDeleteCrop, onClearAll }) {
           )}
         </div>
       </div>
-    </div>
+    </aside>
   );
 }
 
