@@ -31,11 +31,25 @@ export const getStoredAnnotations = () => {
 };
 
 /**
- * Save annotations to browser localStorage
+ * Save annotations to browser localStorage without heavy base64 data URLs
+ * to prevent browser QuotaExceededError and keep persistence lightweight.
  */
 export const saveStoredAnnotations = (annotations) => {
   try {
-    localStorage.setItem(STORAGE_KEY_ANNOTATIONS, JSON.stringify(annotations));
+    const lightweight = {};
+    for (const key of Object.keys(annotations || {})) {
+      const list = annotations[key] || [];
+      lightweight[key] = list.map(({ id, x, y, width, height, taskId, createdAt }) => ({
+        id,
+        x,
+        y,
+        width,
+        height,
+        taskId,
+        createdAt
+      }));
+    }
+    localStorage.setItem(STORAGE_KEY_ANNOTATIONS, JSON.stringify(lightweight));
   } catch (err) {
     console.error('Failed to save annotations to localStorage:', err);
   }

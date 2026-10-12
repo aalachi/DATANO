@@ -363,6 +363,36 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
+.datano-crops-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 12px;
+  background-color: #f1f3f5;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.datano-crop-actions {
+  display: flex;
+  justify-content: stretch;
+  padding: 6px 10px;
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.datano-btn-download {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
 .datano-crop-header {
   display: flex;
   justify-content: space-between;

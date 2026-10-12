@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import LeftUp from './LeftUp';
 import LeftDown from './LeftDown';
 import Center from './Center';
@@ -75,34 +75,41 @@ function Main({ data = [] }) {
   const currentTaskCrops = taskAnnotations[activeTaskKey] || [];
   const currentTaskNote = taskNotes[activeTaskKey] || '';
 
-  // Annotation handlers
-  const handleAddCrop = (newCrop) => {
+  // Annotation handlers memoized with activeTaskKey
+  const handleAddCrop = useCallback((newCrop) => {
     setTaskAnnotations((prev) => ({
       ...prev,
       [activeTaskKey]: [...(prev[activeTaskKey] || []), newCrop]
     }));
-  };
+  }, [activeTaskKey]);
 
-  const handleDeleteCrop = (cropId) => {
+  const handleDeleteCrop = useCallback((cropId) => {
     setTaskAnnotations((prev) => ({
       ...prev,
       [activeTaskKey]: (prev[activeTaskKey] || []).filter((crop) => crop.id !== cropId)
     }));
-  };
+  }, [activeTaskKey]);
 
-  const handleClearAllCrops = () => {
+  const handleClearAllCrops = useCallback(() => {
     setTaskAnnotations((prev) => ({
       ...prev,
       [activeTaskKey]: []
     }));
-  };
+  }, [activeTaskKey]);
 
-  const handleNoteChange = (newNote) => {
+  const handleSyncCrops = useCallback((syncedCrops) => {
+    setTaskAnnotations((prev) => ({
+      ...prev,
+      [activeTaskKey]: syncedCrops
+    }));
+  }, [activeTaskKey]);
+
+  const handleNoteChange = useCallback((newNote) => {
     setTaskNotes((prev) => ({
       ...prev,
       [activeTaskKey]: newNote
     }));
-  };
+  }, [activeTaskKey]);
 
   if (!firstRow) {
     return (
@@ -132,6 +139,7 @@ function Main({ data = [] }) {
       <Center
         currInstru={currInstru}
         onAddCrop={handleAddCrop}
+        onSyncCrops={handleSyncCrops}
         existingCrops={currentTaskCrops}
         notes={currentTaskNote}
         onNotesChange={handleNoteChange}

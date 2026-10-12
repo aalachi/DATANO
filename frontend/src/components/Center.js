@@ -1,13 +1,25 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-function Center({ currInstru, onAddCrop, existingCrops = [], notes = '', onNotesChange }) {
+function Center({ currInstru, onAddCrop, onSyncCrops, existingCrops = [], notes = '', onNotesChange }) {
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
+  const loadedSrcRef = useRef(null);
   const isDrawingRef = useRef(false);
   const startPointRef = useRef({ x: 0, y: 0 });
+  const existingCropsRef = useRef(existingCrops);
+  const onSyncCropsRef = useRef(onSyncCrops);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   const [viewMode, setViewMode] = useState('fit'); // 'fit' or 'full'
+
+  // Keep crops and callback refs synchronized with latest props
+  useEffect(() => {
+    existingCropsRef.current = existingCrops;
+  }, [existingCrops]);
+
+  useEffect(() => {
+    onSyncCropsRef.current = onSyncCrops;
+  }, [onSyncCrops]);
 
   // Redraw canvas with source image and existing/active bounding boxes
   const redrawCanvas = useCallback((activeBox = null) => {
@@ -20,8 +32,9 @@ function Center({ currInstru, onAddCrop, existingCrops = [], notes = '', onNotes
     ctx.drawImage(img, 0, 0);
 
     // Draw existing annotations with distinct styling
-    if (existingCrops && existingCrops.length > 0) {
-      existingCrops.forEach((crop, idx) => {
+    const crops = existingCropsRef.current || [];
+    if (crops.length > 0) {
+      crops.forEach((crop, idx) => {
         ctx.save();
         ctx.strokeStyle = '#28a745';
         ctx.lineWidth = Math.max(3, Math.round(canvas.width / 350));
@@ -59,23 +72,39 @@ function Center({ currInstru, onAddCrop, existingCrops = [], notes = '', onNotes
       ctx.strokeRect(activeBox.x, activeBox.y, activeBox.width, activeBox.height);
       ctx.restore();
     }
-  }, [existingCrops]);
+  }, []);
 
-  // Load and initialize the image whenever currInstru changes
+  // Load and initialize the image ONLY when task id or src changes
+  const targetId = currInstru ? currInstru.id : null;
+  const targetSrc = currInstru ? currInstru.src : null;
+
   useEffect(() => {
-    if (!currInstru || !currInstru.src) {
+    if (!targetSrc) {
       setImageLoaded(false);
       setImageDimensions({ width: 0, height: 0 });
+      loadedSrcRef.current = null;
       return;
     }
 
+    // If this image is already loaded in memory, do not reload or toggle imageLoaded
+    if (loadedSrcRef.current === targetSrc && imageRef.current && imageRef.current.complete) {
+      redrawCanvas();
+      return;
+    }
+
+    let isCancelled = false;
     setImageLoaded(false);
+
     const img = new Image();
-    img.src = currInstru.src;
-    img.crossOrigin = 'anonymous';
+    if (targetSrc.startsWith('http://') || targetSrc.startsWith('https://')) {
+      img.crossOrigin = 'anonymous';
+    }
+    img.src = targetSrc;
 
     img.onload = () => {
+      if (isCancelled) return;
       imageRef.current = img;
+      loadedSrcRef.current = targetSrc;
       setImageDimensions({
         width: img.naturalWidth || img.width,
         height: img.naturalHeight || img.height
@@ -88,19 +117,55 @@ function Center({ currInstru, onAddCrop, existingCrops = [], notes = '', onNotes
         redrawCanvas();
         setImageLoaded(true);
       }
+
+      // Restore dataUrls for crops that were loaded from lightweight storage
+      if (existingCropsRef.current && existingCropsRef.current.length > 0 && onSyncCropsRef.current) {
+        let hasMissing = false;
+        const populated = existingCropsRef.current.map((c) => {
+          if (!c.dataUrl && c.width > 0 && c.height > 0) {
+            hasMissing = true;
+            try {
+              const cropCanvas = document.createElement('canvas');
+              cropCanvas.width = c.width;
+              cropCanvas.height = c.height;
+              const cropCtx = cropCanvas.getContext('2d');
+              cropCtx.drawImage(
+                img,
+                c.x,
+                c.y,
+                c.width,
+                c.height,
+                0,
+                0,
+                c.width,
+                c.height
+              );
+              return { ...c, dataUrl: cropCanvas.toDataURL('image/png') };
+            } catch (e) {
+              return c;
+            }
+          }
+          return c;
+        });
+
+        if (hasMissing && onSyncCropsRef.current) {
+          onSyncCropsRef.current(populated);
+        }
+      }
     };
 
     img.onerror = () => {
-      console.error('Failed to load image:', currInstru.src);
+      if (isCancelled) return;
+      console.error('Failed to load image:', targetSrc);
       setImageLoaded(false);
     };
 
     return () => {
-      imageRef.current = null;
+      isCancelled = true;
     };
-  }, [currInstru, redrawCanvas]);
+  }, [targetId, targetSrc, redrawCanvas]);
 
-  // Redraw when existingCrops change
+  // Redraw bounding boxes instantly whenever annotations change without reloading image
   useEffect(() => {
     if (imageLoaded) {
       redrawCanvas();
@@ -208,6 +273,12 @@ function Center({ currInstru, onAddCrop, existingCrops = [], notes = '', onNotes
     redrawCanvas();
   };
 
+  const handleMouseLeave = (event) => {
+    if (isDrawingRef.current) {
+      handleMouseUp(event);
+    }
+  };
+
   if (!currInstru || !currInstru.instru) {
     return (
       <main id="santr" className="datano-workspace" style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -255,6 +326,7 @@ function Center({ currInstru, onAddCrop, existingCrops = [], notes = '', onNotes
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
         />
 
         {!imageLoaded && (
@@ -280,4 +352,4 @@ function Center({ currInstru, onAddCrop, existingCrops = [], notes = '', onNotes
   );
 }
 
-export default Center;
+export default React.memo(Center);
