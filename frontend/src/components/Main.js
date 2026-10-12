@@ -3,12 +3,30 @@ import LeftUp from './LeftUp';
 import LeftDown from './LeftDown';
 import Center from './Center';
 import Right from './Right';
+import {
+  getStoredAnnotations,
+  saveStoredAnnotations,
+  getStoredNotes,
+  saveStoredNotes
+} from '../data/instructions';
 
 function Main({ data = [] }) {
   const [currCollectionName, setCurrCollectionName] = useState('');
   const [currInstruId, setCurrInstruId] = useState('');
-  // Store annotations keyed by taskId: { [taskId]: [crop1, crop2, ...] }
-  const [taskAnnotations, setTaskAnnotations] = useState({});
+  
+  // Persistent annotations & reviewer notes from localStorage
+  const [taskAnnotations, setTaskAnnotations] = useState(() => getStoredAnnotations());
+  const [taskNotes, setTaskNotes] = useState(() => getStoredNotes());
+
+  // Save to localStorage whenever annotations change
+  useEffect(() => {
+    saveStoredAnnotations(taskAnnotations);
+  }, [taskAnnotations]);
+
+  // Save to localStorage whenever notes change
+  useEffect(() => {
+    saveStoredNotes(taskNotes);
+  }, [taskNotes]);
 
   // Extract unique collection names
   const { firstRow, restCollec } = useMemo(() => {
@@ -39,7 +57,6 @@ function Main({ data = [] }) {
   // Set default instruction when collection changes
   useEffect(() => {
     if (viewCollec.length > 0) {
-      // If current instruction is not in viewCollec, select the first one
       const existsInCurrentView = viewCollec.some((item) => String(item.id) === String(currInstruId));
       if (!existsInCurrentView) {
         setCurrInstruId(String(viewCollec[0].id));
@@ -53,9 +70,10 @@ function Main({ data = [] }) {
     return data.find((item) => String(item.id) === String(currInstruId)) || null;
   }, [data, currInstruId]);
 
-  // Current active unique task key (using database id to avoid collision between collections sharing taskId)
+  // Current active unique task key (database id)
   const activeTaskKey = currInstru ? String(currInstru.id) : 'default';
   const currentTaskCrops = taskAnnotations[activeTaskKey] || [];
+  const currentTaskNote = taskNotes[activeTaskKey] || '';
 
   // Annotation handlers
   const handleAddCrop = (newCrop) => {
@@ -76,6 +94,13 @@ function Main({ data = [] }) {
     setTaskAnnotations((prev) => ({
       ...prev,
       [activeTaskKey]: []
+    }));
+  };
+
+  const handleNoteChange = (newNote) => {
+    setTaskNotes((prev) => ({
+      ...prev,
+      [activeTaskKey]: newNote
     }));
   };
 
@@ -108,6 +133,8 @@ function Main({ data = [] }) {
         currInstru={currInstru}
         onAddCrop={handleAddCrop}
         existingCrops={currentTaskCrops}
+        notes={currentTaskNote}
+        onNotesChange={handleNoteChange}
       />
 
       <Right

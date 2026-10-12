@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Right({ currInstru, crops = [], onDeleteCrop, onClearAll }) {
+function Right({ currInstru, crops = [], onDeleteCrop, onClearAll, onResetAll }) {
   if (!currInstru || !currInstru.instru) {
     return null;
   }
@@ -12,6 +12,39 @@ function Right({ currInstru, crops = [], onDeleteCrop, onClearAll }) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleExportJSON = () => {
+    const exportData = {
+      task: {
+        id: currInstru.id,
+        taskId: currInstru.taskId,
+        collection: currInstru.collection,
+        instruction: currInstru.instru,
+        src: currInstru.src,
+        urgency: currInstru.urgency
+      },
+      annotations: crops.map(({ id, x, y, width, height, createdAt }) => ({
+        id,
+        x,
+        y,
+        width,
+        height,
+        createdAt
+      })),
+      totalAnnotations: crops.length,
+      exportedAt: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `datano-annotations-${currInstru.taskId || 'task'}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -55,22 +88,32 @@ function Right({ currInstru, crops = [], onDeleteCrop, onClearAll }) {
       <div id="zcrops" className="datano-card">
         <div id="ntatio" className="datano-card-header">
           <span>Annotations ({crops.length})</span>
-          {crops.length > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className="datano-badge datano-badge-success">Active</span>
-              {onClearAll && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            {crops.length > 0 && (
+              <>
                 <button
                   type="button"
-                  className="datano-btn datano-btn-outline-danger"
+                  className="datano-btn datano-btn-outline-primary"
                   style={{ padding: '2px 8px', fontSize: '11px' }}
-                  onClick={onClearAll}
-                  title="Clear all annotations on this task"
+                  onClick={handleExportJSON}
+                  title="Export annotations as JSON"
                 >
-                  Clear All
+                  Export JSON
                 </button>
-              )}
-            </div>
-          )}
+                {onClearAll && (
+                  <button
+                    type="button"
+                    className="datano-btn datano-btn-outline-danger"
+                    style={{ padding: '2px 8px', fontSize: '11px' }}
+                    onClick={onClearAll}
+                    title="Clear annotations on this task"
+                  >
+                    Clear
+                  </button>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
         {/* Scrollable container with fixed maximum height */}

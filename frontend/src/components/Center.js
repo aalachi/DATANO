@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-function Center({ currInstru, onAddCrop, existingCrops = [] }) {
+function Center({ currInstru, onAddCrop, existingCrops = [], notes = '', onNotesChange }) {
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
   const isDrawingRef = useRef(false);
   const startPointRef = useRef({ x: 0, y: 0 });
-  const [comment, setComment] = useState('');
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   const [viewMode, setViewMode] = useState('fit'); // 'fit' or 'full'
@@ -271,10 +270,10 @@ function Center({ currInstru, onAddCrop, existingCrops = [] }) {
         <textarea
           id="brr"
           className="datano-notes-input"
-          placeholder="Add reviewer notes or annotation comments for this task..."
+          placeholder="Add reviewer notes or annotation comments for this task (saved automatically)..."
           rows={3}
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
+          value={notes}
+          onChange={(e) => onNotesChange && onNotesChange(e.target.value)}
         />
       </div>
     </main>
