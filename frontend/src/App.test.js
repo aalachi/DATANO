@@ -3,8 +3,8 @@ import App from './App';
 
 test('renders DATANO navigation logo', () => {
   render(<App />);
-  const logoElement = screen.getByText('DATANO');
-  expect(logoElement).toBeInTheDocument();
+  const logoElements = screen.getAllByText('DATANO');
+  expect(logoElements.length).toBeGreaterThan(0);
 });
 
 test('renders navigation links', () => {
