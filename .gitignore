@@ -27,4 +27,5 @@ yarn-error.log*
 Thumbs.db
 
 # Test artifacts
-*_verified.png
+*_verified.png.playwright-mcp/
+.env
